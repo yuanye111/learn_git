@@ -1,2 +1,2 @@
 it is a new feature
-
+add a new line in feature.txt
