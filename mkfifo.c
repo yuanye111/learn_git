@@ -1,8 +1,9 @@
 #include "unistd.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include <sys/stat.h>
 
-int int main(int argc, char const *argv[])
+int main(int argc, char const *argv[])
 {
 	int ret;
 	ret = mkfifo("./myfifo",0777);
