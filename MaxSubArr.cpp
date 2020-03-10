@@ -1,37 +1,48 @@
+#include <stdio.h>
+#include <vector>
+using namespace std;
+
 class Solution {
 public:
     std::vector<int> Arr;
+
 	int FindCrossMaxArr(int start,int mid, int end)
 	{
        int max_left,max_right;
-       int left;
-       int right;
-       max_left = max_right = 0;
-       for(int i = mid;i >= start;i--)
+       int sum = 0;
+       
+       max_left = Arr[mid];
+       max_right = Arr[mid+1];
+       for(int i = mid;i > start;i--)
        {
-           if(max_left + Arr[i] > max_left)
+           sum = sum + Arr[i];
+
+           if(sum > max_left)
                {
-               	 max_left = max_left + Arr[i];
-                 left = i;
+               	 max_left = sum;
                }
        }
+       
+       sum = 0;
 
-       for (int i = 0; i <= end; ++i)
+       for (int i = mid+1; i < end; i++)
        {
-       	  if(max_right + Arr[i] > max_right)
+       	  sum += Arr[i];
+
+       	  if(sum > max_right)
        	  {
-       	  	max_right = max_right + Arr[i];
-       	  	right = i;
+       	  	max_right = sum;
        	  }
        }
 
        return max_right + max_left;
 
 	}
+
     int FindMaxSubArray(int start,int end)
     {
     	int mid;
-    	int mid_max,left_max,right_max;
+    	int mid_max,left_max,right_max,max;
     	if(start == end)
     		return Arr[start];
 
@@ -42,14 +53,31 @@ public:
 
         if(left_max > right_max && left_max > mid_max)
         {
-        	return  left_max;
+        	max = left_max;
         }
         else if(mid_max > right_max)
-        	return mid_max;
+        	max = mid_max;
         else
-        	return right_max;
+        	max = right_max;
+        
+        
+        return max;
     }
+
     int maxSubArray(vector<int>& nums) {
-          
+        Arr = nums;
+       
+        int max = FindMaxSubArray(0,nums.size()-1);
+        
+        return max;
     }
 };
+
+int main()
+{
+	Solution sol;
+    int max;
+	std::vector<int> v = {-2,1,-3,4,-1,2,1,-5,4};
+	max = sol.maxSubArray(v);
+	printf("max:%d\n",max);
+}
