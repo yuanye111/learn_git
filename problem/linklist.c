@@ -1,4 +1,8 @@
 #include<stdio.h>
+#include<stdlib.h>
+typedef int bool;
+#define false 0
+#define true 1
 typedef struct LNode
 {
    int data;
@@ -23,13 +27,27 @@ void DeleNode(LinkList head){
    free(first);
 }
 
+void MoveNode(LinkList head){
+	LinkList node = head->next;
+	LinkList first = head->next;
+	while(node->next != head){
+		node = node->next;
+	}
+	node->next = first;
+	head->next = first->next;
+	first->next = head;
+
+}
+
 bool CheckJob(LinkList head){
-     first = head->next;
-     if(first->next==head)
+     LinkList first = head->next;
+     LinkList cur;
+     
+     if(first->next == head)
      	return true;
 
-      cur = first ->next;
-      while(cur->next != head)
+      cur = first->next;
+      while(cur != head)
       {
          if(cur->data > first->data){
 	  return false;
@@ -39,45 +57,64 @@ bool CheckJob(LinkList head){
 	   cur = cur->next;
 	 }
       }
-      return ture;
+      return true;
+}
+
+void TransList(LinkList head)
+{
+  LinkList node = head->next;
+  while(node != head)
+  {
+    printf("%d ",node->data);
+    node = node->next;
+  }
+  printf("\n");
 }
 
 int main()
 {
   int cases;
-  int JobCounts,MyJob;
+  int FrontData = -1;
+  int JobCounts=5,MyJob;
   int CurJob;
-  LinsList first,cur;
+  int MyPos;
+  int i;
+  LinkList first,cur;
   int mins = 0;
   LinkList head = (LinkList)malloc(sizeof(LNode));
   head->data = -1;
   head->next = head;
   first = head->next;
 
+
   scanf("%d",&cases);
 
   while(cases > 0)
   {
-    scanf("%d,%d",&JobCounts,&MyJob);
-    while(JobCounts>0){
+    scanf("%d %d",&JobCounts,&MyPos);
+    for(i = 0;i<JobCounts;i++){
       scanf("%d",&CurJob);
+      
+      if(MyPos = i)
+      	MyJob = CurJob;
+
       InsertNode(head,CurJob);
-      JobCounts--;
+      i++;
     }
    do{
-      first = head->next;
       if(CheckJob(head) == 1)
       {
+        FrontData = head->next->data;
       	DeleNode(head);
+        mins++;
       }
       else{
-        InsertNode(head,first->data);
-      	DeleNode(head);
+        MoveNode(head);
       }
-     minus++;
-     }while(first->data != MyJob)
+     }while(FrontData != MyJob);
     
-    printf("%d",minus);
+    printf("%d",mins);
+    cases--;
   }
 
 }
