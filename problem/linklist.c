@@ -6,12 +6,14 @@ typedef int bool;
 typedef struct LNode
 {
    int data;
+   int pos;
    struct LNode *next;	
 } LNode,*LinkList;
 
-void InsertNode(LinkList head,int prior){
+void InsertNode(LinkList head,int prior,int pos){
     LinkList ins = (LinkList)malloc(sizeof(LNode));
     ins->data = prior;
+    ins->pos = pos;
     LinkList first = head;
     
     while(first->next != head)
@@ -74,45 +76,41 @@ void TransList(LinkList head)
 int main()
 {
   int cases;
-  int FrontData = -1;
-  int JobCounts=5,MyJob;
+  int FrontData;
+  int JobCounts;
   int CurJob;
   int MyPos;
   int i;
-  LinkList first,cur;
   int mins = 0;
   LinkList head = (LinkList)malloc(sizeof(LNode));
-  head->data = -1;
   head->next = head;
-  first = head->next;
-
-
+  head->data = head->pos = -1;
   scanf("%d",&cases);
-
+  
   while(cases > 0)
   {
+    mins = 0;
+    FrontData = -1;
     scanf("%d %d",&JobCounts,&MyPos);
     for(i = 0;i<JobCounts;i++){
       scanf("%d",&CurJob);
-      
-      if(MyPos = i)
-      	MyJob = CurJob;
-
-      InsertNode(head,CurJob);
-      i++;
+      InsertNode(head,CurJob,i);
     }
    do{
-      if(CheckJob(head) == 1)
+      if(CheckJob(head) == true)
       {
-        FrontData = head->next->data;
+        FrontData = head->next->pos;
       	DeleNode(head);
         mins++;
       }
       else{
         MoveNode(head);
       }
-     }while(FrontData != MyJob);
-    
+     }while(FrontData != MyPos);
+   
+    while(head->next != head)
+    	DeleNode(head);
+
     printf("%d",mins);
     cases--;
   }
